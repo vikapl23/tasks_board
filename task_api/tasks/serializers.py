@@ -1,6 +1,7 @@
 from datetime import date
 
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Board, Comment, Task
 
@@ -50,3 +51,11 @@ class CommentSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError('Коментар не може бути порожнім')
         return value
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        return token

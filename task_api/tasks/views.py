@@ -1,8 +1,8 @@
 from datetime import date
 
 from rest_framework import viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .models import Board, Comment, Task
@@ -47,3 +47,13 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def me(request):
+    return Response({
+        'id': request.user.id,
+        'username': request.user.username,
+        'email': request.user.email,
+    })

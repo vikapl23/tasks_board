@@ -24,7 +24,7 @@ class TaskPermissionsTests(APITestCase):
 
     def test_anonymous_cannot_edit(self):
         response = self.client.patch(self.url, {'status': 'done'})
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_other_user_cannot_edit(self):
         self.client.force_authenticate(user=self.other)
